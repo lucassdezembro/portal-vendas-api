@@ -2,8 +2,12 @@ package utils
 
 import (
 	"encoding/json"
+	"regexp"
+	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber"
+	errors_utils "github.com/lucassdezembro/portal-vendas-api/utils/errors"
 )
 
 func HandleSuccessData(c *fiber.Ctx, data any, status int) {
@@ -37,9 +41,30 @@ func HandleSuccessData(c *fiber.Ctx, data any, status int) {
 	}
 }
 
-func HandleErrorData(c *fiber.Ctx, err error, status int) {
+func HandleErrorData(c *fiber.Ctx, err errors_utils.Error, status int) {
+
+	customSplittedError := strings.Split(err.Error(), ":")
+	customMessage := err.Error()
+
+	if len(customSplittedError) > 0 {
+
+		regex := regexp.MustCompile(`^[0-9]+$`)
+
+		if regex.MatchString(customSplittedError[0]) {
+			parsedStatus, parseError := strconv.Atoi(customSplittedError[0])
+			if parseError == nil {
+				status = parsedStatus
+				customMessage = strings.Replace(err.Error(), customSplittedError[0]+": ", "", 1)
+			}
+		}
+	}
+
+	if status == 0 {
+		status = fiber.StatusInternalServerError
+	}
+
 	c.Status(status).JSON(fiber.Map{
 		"status": "error",
-		"error":  err.Error(),
+		"error":  customMessage,
 	})
 }

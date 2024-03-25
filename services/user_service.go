@@ -1,11 +1,10 @@
 package services
 
 import (
-	"errors"
-
 	"github.com/lucassdezembro/portal-vendas-api/entities"
 	models "github.com/lucassdezembro/portal-vendas-api/models/requests"
 	"github.com/lucassdezembro/portal-vendas-api/repositories"
+	errors_utils "github.com/lucassdezembro/portal-vendas-api/utils/errors"
 )
 
 type UserService struct {
@@ -18,7 +17,7 @@ func NewUserService(repository *repositories.UserRepository) *UserService {
 	}
 }
 
-func (s *UserService) CreateUser(req models.CreateUserRequest) (*entities.UserEntity, error) {
+func (s *UserService) CreateUser(req models.CreateUserRequest) (*entities.UserEntity, errors_utils.Error) {
 
 	userList, err := s.repository.QueryUsers(models.QueryUsersRequest{
 		Document: req.User.Document,
@@ -28,7 +27,7 @@ func (s *UserService) CreateUser(req models.CreateUserRequest) (*entities.UserEn
 	}
 
 	if len(userList) > 0 {
-		return nil, errors.New("user already exists")
+		return nil, errors_utils.NewBadRequestError("user already exists")
 	}
 
 	entity := entities.UserEntity{
