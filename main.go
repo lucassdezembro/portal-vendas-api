@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber"
+	"github.com/lucassdezembro/portal-vendas-api/routes"
 )
 
 var (
@@ -20,9 +21,7 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) {
-		c.SendString("Hello, World!")
-	})
+	routes.SetupRoutes(app)
 
 	fmt.Printf("Server is running on port: %d...", PORT)
 
