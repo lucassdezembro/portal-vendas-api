@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber"
+	"github.com/lucassdezembro/portal-vendas-api/controllers"
 	"github.com/lucassdezembro/portal-vendas-api/routes"
 )
 
@@ -21,7 +22,13 @@ func main() {
 
 	app := fiber.New()
 
-	routes.SetupRoutes(app)
+	routesOptions := map[string]interface{}{
+		"user": map[string]interface{}{
+			"controller": controllers.NewUserController(),
+		},
+	}
+
+	routes.SetupRoutes(app, routesOptions)
 
 	fmt.Printf("Server is running on port: %d...", PORT)
 

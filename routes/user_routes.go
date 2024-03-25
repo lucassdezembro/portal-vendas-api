@@ -1,22 +1,19 @@
 package routes
 
-import "github.com/gofiber/fiber"
+import (
+	"github.com/gofiber/fiber"
+	"github.com/lucassdezembro/portal-vendas-api/controllers"
+)
 
-func UserRoutes(app *fiber.App) {
+func UserRoutes(app *fiber.App, userOptions map[string]interface{}) {
 
-	app.Get("/users", func(c *fiber.Ctx) {
-		c.SendString("All users")
-	})
+	controller := userOptions["controller"].(*controllers.UserController)
 
-	app.Get("/users/:id", func(c *fiber.Ctx) {
-		c.SendString("Get user by id")
-	})
+	app.Get("/users", controller.GetAllUsers)
 
-	app.Post("/users", func(c *fiber.Ctx) {
-		c.SendString("Create user")
-	})
+	app.Get("/users/:id", controller.GetUserById)
 
-	app.Put("/users/:id", func(c *fiber.Ctx) {
-		c.SendString("Update user")
-	})
+	app.Post("/users", controller.CreateUser)
+
+	app.Put("/users/:id", controller.UpdateUser)
 }
