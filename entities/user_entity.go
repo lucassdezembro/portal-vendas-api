@@ -17,7 +17,7 @@ type UserEntity struct {
 
 func (entity *UserEntity) GenerateId() {
 
-	base := entity.Name + time.Now().UTC().Format(time.RFC3339)
+	base := entity.Document + time.Now().UTC().Format(time.RFC3339)
 
 	hash := sha1.New()
 	hash.Write([]byte(base))
