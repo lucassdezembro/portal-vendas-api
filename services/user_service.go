@@ -51,3 +51,7 @@ func (s *UserService) CreateUser(req models.CreateUserRequest) (*entities.UserEn
 func (s *UserService) GetUser(id string) (*entities.UserEntity, error) {
 	return s.repository.GetUser(id)
 }
+
+func (s *UserService) GetAllUsers() ([]entities.UserEntity, error) {
+	return s.repository.QueryUsers(models.QueryUsersRequest{})
+}

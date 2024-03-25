@@ -25,7 +25,7 @@ func HandleSuccessData(c *fiber.Ctx, data any, status int) {
 			return
 		}
 
-		mappedData := map[string]interface{}{}
+		var mappedData any
 		err = json.Unmarshal(b, &mappedData)
 		if err != nil {
 			c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

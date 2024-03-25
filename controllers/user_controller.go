@@ -18,7 +18,14 @@ func NewUserController(userService *services.UserService) *UserController {
 }
 
 func (u *UserController) GetAllUsers(c *fiber.Ctx) {
-	c.SendString("All users")
+
+	result, err := u.userService.GetAllUsers()
+	if err != nil {
+		utils.HandleErrorData(c, err, 0)
+		return
+	}
+
+	utils.HandleSuccessData(c, result, fiber.StatusOK)
 }
 
 func (u *UserController) GetUserById(c *fiber.Ctx) {
@@ -63,7 +70,7 @@ func (u *UserController) CreateUser(c *fiber.Ctx) {
 
 	result, err := u.userService.CreateUser(serviceReq)
 	if err != nil {
-		utils.HandleErrorData(c, err, fiber.StatusInternalServerError)
+		utils.HandleErrorData(c, err, 0)
 		return
 	}
 
