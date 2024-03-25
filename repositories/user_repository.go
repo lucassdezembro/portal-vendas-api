@@ -27,3 +27,16 @@ func (r *UserRepository) CreateUser(user entities.UserEntity) error {
 
 	return nil
 }
+
+func (r *UserRepository) GetUser(id string) (*entities.UserEntity, error) {
+
+	user := &entities.UserEntity{}
+
+	tx := r.db.Where("id = ?", id).First(user)
+
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	return user, nil
+}

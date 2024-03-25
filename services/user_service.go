@@ -35,3 +35,7 @@ func (s *UserService) CreateUser(req models.CreateUserRequest) (*entities.UserEn
 
 	return &entity, nil
 }
+
+func (s *UserService) GetUser(id string) (*entities.UserEntity, error) {
+	return s.repository.GetUser(id)
+}

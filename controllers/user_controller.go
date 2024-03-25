@@ -22,7 +22,16 @@ func (u *UserController) GetAllUsers(c *fiber.Ctx) {
 }
 
 func (u *UserController) GetUserById(c *fiber.Ctx) {
-	c.SendString("Get user by id")
+
+	id := c.Params("id")
+
+	result, err := u.userService.GetUser(id)
+	if err != nil {
+		utils.HandleErrorData(c, err, fiber.StatusInternalServerError)
+		return
+	}
+
+	utils.HandleSuccessData(c, result, fiber.StatusOK)
 }
 
 func (u *UserController) CreateUser(c *fiber.Ctx) {
