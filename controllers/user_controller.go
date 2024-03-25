@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber"
 	models "github.com/lucassdezembro/portal-vendas-api/models/requests"
 	"github.com/lucassdezembro/portal-vendas-api/services"
+	"github.com/lucassdezembro/portal-vendas-api/utils"
 )
 
 type UserController struct {
@@ -36,7 +37,7 @@ func (u *UserController) CreateUser(c *fiber.Ctx) {
 	}{}
 
 	if err := c.BodyParser(req); err != nil {
-		c.Status(fiber.StatusBadRequest).SendString(err.Error())
+		utils.HandleErrorData(c, err, fiber.StatusBadRequest)
 		return
 	}
 
@@ -51,16 +52,13 @@ func (u *UserController) CreateUser(c *fiber.Ctx) {
 
 	result, err := u.userService.CreateUser(serviceReq)
 	if err != nil {
-		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status": "error",
-			"error":  err.Error(),
-		})
+		utils.HandleErrorData(c, err, fiber.StatusInternalServerError)
 		return
 	}
 
-	c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"data": *result,
-	})
+	//TODO: ajustar connect do DB para pegar dados via env
+
+	utils.HandleSuccessData(c, result, fiber.StatusCreated)
 }
 
 func (u *UserController) UpdateUser(c *fiber.Ctx) {

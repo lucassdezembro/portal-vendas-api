@@ -7,11 +7,11 @@ import (
 )
 
 type UserEntity struct {
-	Id       string `gorm:"type:varchar(255);primaryKey;not null;"`
-	Name     string `gorm:"type:varchar(255);not null"`
-	Email    string `gorm:"type:varchar(255);not null;unique"`
-	Phone    string `gorm:"type:varchar(20);not null;unique"`
-	Password string `gorm:"type:varchar(255);not null"`
+	Id       string `json:"id" gorm:"type:varchar(255);primaryKey;not null;"`
+	Name     string `json:"name" gorm:"type:varchar(255);not null"`
+	Email    string `json:"email" gorm:"type:varchar(255);not null"`
+	Phone    string `json:"phone" gorm:"type:varchar(20);not null"`
+	Password string `json:"-" gorm:"type:varchar(255);not null"`
 }
 
 func (entity *UserEntity) GenerateId() {
