@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber"
 	"github.com/lucassdezembro/portal-vendas-api/controllers"
+	"github.com/lucassdezembro/portal-vendas-api/db"
 	"github.com/lucassdezembro/portal-vendas-api/repositories"
 	"github.com/lucassdezembro/portal-vendas-api/routes"
 	"github.com/lucassdezembro/portal-vendas-api/services"
@@ -24,8 +25,13 @@ func main() {
 
 	app := fiber.New()
 
+	dbConnection, err := db.Connect()
+	if err != nil {
+		panic(err)
+	}
+
 	//setup repositories
-	userRepository := repositories.NewUserRepository()
+	userRepository := repositories.NewUserRepository(dbConnection)
 
 	//setup services
 	userService := services.NewUserService(userRepository)
