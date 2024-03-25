@@ -20,6 +20,7 @@ func (s *UserService) CreateUser(req models.CreateUserRequest) (*entities.UserEn
 
 	entity := entities.UserEntity{
 		Name:     req.User.Name,
+		Document: req.User.Document,
 		Email:    req.User.Email,
 		Phone:    req.User.Phone,
 		Password: req.User.Password,

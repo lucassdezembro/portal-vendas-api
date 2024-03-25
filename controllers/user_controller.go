@@ -30,6 +30,7 @@ func (u *UserController) CreateUser(c *fiber.Ctx) {
 	req := &struct {
 		User struct {
 			Name     string `json:"name"`
+			Document string `json:"document"`
 			Email    string `json:"email"`
 			Phone    string `json:"phone"`
 			Password string `json:"password"`
@@ -44,6 +45,7 @@ func (u *UserController) CreateUser(c *fiber.Ctx) {
 	serviceReq := models.CreateUserRequest{
 		User: models.CreateUserRequest_User{
 			Name:     req.User.Name,
+			Document: req.User.Document,
 			Email:    req.User.Email,
 			Phone:    req.User.Phone,
 			Password: req.User.Password,
