@@ -56,8 +56,6 @@ func (u *UserController) CreateUser(c *fiber.Ctx) {
 		return
 	}
 
-	//TODO: ajustar connect do DB para pegar dados via env
-
 	utils.HandleSuccessData(c, result, fiber.StatusCreated)
 }
 
