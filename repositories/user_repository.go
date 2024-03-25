@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"github.com/lucassdezembro/portal-vendas-api/entities"
+	models "github.com/lucassdezembro/portal-vendas-api/models/requests"
 	"gorm.io/gorm"
 )
 
@@ -39,4 +40,21 @@ func (r *UserRepository) GetUser(id string) (*entities.UserEntity, error) {
 	}
 
 	return user, nil
+}
+
+func (r *UserRepository) QueryUsers(filters models.QueryUsersRequest) ([]entities.UserEntity, error) {
+
+	users := []entities.UserEntity{}
+
+	var tx *gorm.DB
+
+	if filters.Document != "" {
+		tx = r.db.Where("document = ?", filters.Document).Find(&users)
+	}
+
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	return users, nil
 }
