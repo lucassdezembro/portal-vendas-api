@@ -1,12 +1,18 @@
 package controllers
 
-import "github.com/gofiber/fiber"
+import (
+	"github.com/gofiber/fiber"
+	"github.com/lucassdezembro/portal-vendas-api/services"
+)
 
 type UserController struct {
+	userService *services.UserService
 }
 
-func NewUserController() *UserController {
-	return &UserController{}
+func NewUserController(userService *services.UserService) *UserController {
+	return &UserController{
+		userService: userService,
+	}
 }
 
 func (u *UserController) GetAllUsers(c *fiber.Ctx) {

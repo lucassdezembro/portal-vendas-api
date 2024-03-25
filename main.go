@@ -6,7 +6,9 @@ import (
 
 	"github.com/gofiber/fiber"
 	"github.com/lucassdezembro/portal-vendas-api/controllers"
+	"github.com/lucassdezembro/portal-vendas-api/repositories"
 	"github.com/lucassdezembro/portal-vendas-api/routes"
+	"github.com/lucassdezembro/portal-vendas-api/services"
 )
 
 var (
@@ -22,9 +24,15 @@ func main() {
 
 	app := fiber.New()
 
+	//setup repositories
+	userRepository := repositories.NewUserRepository()
+
+	//setup services
+	userService := services.NewUserService(userRepository)
+
 	routesOptions := map[string]interface{}{
 		"user": map[string]interface{}{
-			"controller": controllers.NewUserController(),
+			"controller": controllers.NewUserController(userService),
 		},
 	}
 
