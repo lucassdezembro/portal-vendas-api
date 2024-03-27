@@ -4,6 +4,7 @@ import (
 	"github.com/lucassdezembro/portal-vendas-api/entities"
 	models "github.com/lucassdezembro/portal-vendas-api/models/requests"
 	"github.com/lucassdezembro/portal-vendas-api/repositories"
+	"github.com/lucassdezembro/portal-vendas-api/utils"
 	errors_utils "github.com/lucassdezembro/portal-vendas-api/utils/errors"
 )
 
@@ -30,12 +31,17 @@ func (s *UserService) CreateUser(req models.CreateUserRequest) (*entities.UserEn
 		return nil, errors_utils.NewBadRequestError("user already exists")
 	}
 
+	hashedPassword, err := utils.HashAndSalt(req.User.Password)
+	if err != nil {
+		return nil, err
+	}
+
 	entity := entities.UserEntity{
 		Name:     req.User.Name,
 		Document: req.User.Document,
 		Email:    req.User.Email,
 		Phone:    req.User.Phone,
-		Password: req.User.Password,
+		Password: hashedPassword,
 	}
 
 	entity.GenerateId()
