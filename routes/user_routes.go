@@ -13,7 +13,5 @@ func UserRoutes(app *fiber.App, userOptions map[string]interface{}) {
 
 	app.Get("/users/:id", controller.GetUserById)
 
-	app.Post("/users", controller.CreateUser)
-
 	app.Put("/users/:id", controller.UpdateUser)
 }

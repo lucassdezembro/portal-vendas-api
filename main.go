@@ -32,13 +32,18 @@ func main() {
 
 	//setup repositories
 	userRepository := repositories.NewUserRepository(dbConnection)
+	authRepository := repositories.NewAuthRepository()
 
 	//setup services
 	userService := services.NewUserService(userRepository)
+	authService := services.NewAuthService(authRepository)
 
 	routesOptions := map[string]interface{}{
 		"user": map[string]interface{}{
 			"controller": controllers.NewUserController(userService),
+		},
+		"auth": map[string]interface{}{
+			"controller": controllers.NewAuthController(userService, authService),
 		},
 	}
 

@@ -19,6 +19,7 @@ require (
 require (
 	github.com/andybalholm/brotli v1.0.0 // indirect
 	github.com/gofiber/utils v0.0.10 // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/gorilla/schema v1.1.0 // indirect
 	github.com/klauspost/compress v1.10.7 // indirect
 	github.com/mattn/go-colorable v0.1.7 // indirect

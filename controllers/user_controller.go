@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber"
-	models "github.com/lucassdezembro/portal-vendas-api/models/requests"
 	"github.com/lucassdezembro/portal-vendas-api/services"
 	"github.com/lucassdezembro/portal-vendas-api/utils"
 )
@@ -39,42 +38,6 @@ func (u *UserController) GetUserById(c *fiber.Ctx) {
 	}
 
 	utils.HandleSuccessData(c, result, fiber.StatusOK)
-}
-
-func (u *UserController) CreateUser(c *fiber.Ctx) {
-
-	req := &struct {
-		User struct {
-			Name     string `json:"name"`
-			Document string `json:"document"`
-			Email    string `json:"email"`
-			Phone    string `json:"phone"`
-			Password string `json:"password"`
-		} `json:"user"`
-	}{}
-
-	if err := c.BodyParser(req); err != nil {
-		utils.HandleErrorData(c, err, fiber.StatusBadRequest)
-		return
-	}
-
-	serviceReq := models.CreateUserRequest{
-		User: models.CreateUserRequest_User{
-			Name:     req.User.Name,
-			Document: req.User.Document,
-			Email:    req.User.Email,
-			Phone:    req.User.Phone,
-			Password: req.User.Password,
-		},
-	}
-
-	result, err := u.userService.CreateUser(serviceReq)
-	if err != nil {
-		utils.HandleErrorData(c, err, 0)
-		return
-	}
-
-	utils.HandleSuccessData(c, result, fiber.StatusCreated)
 }
 
 func (u *UserController) UpdateUser(c *fiber.Ctx) {
