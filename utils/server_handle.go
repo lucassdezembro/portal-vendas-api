@@ -41,7 +41,7 @@ func HandleSuccessData(c *fiber.Ctx, data any, status int) {
 	}
 }
 
-func HandleErrorData(c *fiber.Ctx, err errors_utils.Error, status int) {
+func HandleErrorData(c *fiber.Ctx, err errors_utils.Error, status ...int) {
 
 	customSplittedError := strings.Split(err.Error(), ":")
 	customMessage := err.Error()
@@ -53,17 +53,17 @@ func HandleErrorData(c *fiber.Ctx, err errors_utils.Error, status int) {
 		if regex.MatchString(customSplittedError[0]) {
 			parsedStatus, parseError := strconv.Atoi(customSplittedError[0])
 			if parseError == nil {
-				status = parsedStatus
+				status = append(status, parsedStatus)
 				customMessage = strings.Replace(err.Error(), customSplittedError[0]+": ", "", 1)
 			}
 		}
 	}
 
-	if status == 0 {
-		status = fiber.StatusInternalServerError
+	if len(status) == 0 {
+		status = append(status, fiber.StatusInternalServerError)
 	}
 
-	c.Status(status).JSON(fiber.Map{
+	c.Status(status[0]).JSON(fiber.Map{
 		"status": "error",
 		"error":  customMessage,
 	})

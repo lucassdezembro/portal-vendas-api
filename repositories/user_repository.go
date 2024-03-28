@@ -50,6 +50,8 @@ func (r *UserRepository) QueryUsers(filters models.QueryUsersRequest) ([]entitie
 
 	if filters.Document != "" {
 		tx = r.db.Where("document = ?", filters.Document).Find(&users)
+	} else if filters.Email != "" {
+		tx = r.db.Where("email = ?", filters.Email).Find(&users)
 	} else {
 		tx = r.db.Find(&users)
 	}

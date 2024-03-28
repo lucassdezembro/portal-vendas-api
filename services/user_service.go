@@ -20,14 +20,12 @@ func NewUserService(repository *repositories.UserRepository) *UserService {
 
 func (s *UserService) CreateUser(req models.CreateUserRequest) (*entities.UserEntity, errors_utils.Error) {
 
-	userList, err := s.repository.QueryUsers(models.QueryUsersRequest{
-		Document: req.User.Document,
-	})
+	userList, err := s.GetUserByDocument(req.User.Document, false)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(userList) > 0 {
+	if userList != nil {
 		return nil, errors_utils.NewBadRequestError("user already exists")
 	}
 
@@ -60,4 +58,40 @@ func (s *UserService) GetUser(id string) (*entities.UserEntity, error) {
 
 func (s *UserService) GetAllUsers() ([]entities.UserEntity, error) {
 	return s.repository.QueryUsers(models.QueryUsersRequest{})
+}
+
+func (s *UserService) GetUserByDocument(document string, returnError bool) (*entities.UserEntity, error) {
+	users, err := s.repository.QueryUsers(models.QueryUsersRequest{
+		Document: document,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if len(users) == 0 {
+		if returnError {
+			return nil, errors_utils.NewResourceNotFoundError("user not found")
+		}
+		return nil, nil
+	}
+
+	return &users[0], nil
+}
+
+func (s *UserService) GetUserByEmail(email string, returnError bool) (*entities.UserEntity, error) {
+	users, err := s.repository.QueryUsers(models.QueryUsersRequest{
+		Email: email,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if len(users) == 0 {
+		if returnError {
+			return nil, errors_utils.NewResourceNotFoundError("user not found")
+		}
+		return nil, nil
+	}
+
+	return &users[0], nil
 }

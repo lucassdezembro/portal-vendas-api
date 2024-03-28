@@ -38,3 +38,19 @@ func (r *AuthRepository) GenerateJWT(user entities.UserEntity) (string, error) {
 
 	return tokenString, nil
 }
+
+func (r *AuthRepository) VerifyJWT(tokenString string) (bool, error) {
+
+	secretKey := []byte(os.Getenv("JWT_SECRET_KEY"))
+
+	keyFunc := func(token *jwt.Token) (interface{}, error) {
+		return secretKey, nil
+	}
+
+	token, err := jwt.Parse(tokenString, keyFunc)
+	if err != nil {
+		return false, err
+	}
+
+	return token.Valid, nil
+}

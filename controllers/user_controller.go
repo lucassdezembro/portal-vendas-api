@@ -20,7 +20,7 @@ func (u *UserController) GetAllUsers(c *fiber.Ctx) {
 
 	result, err := u.userService.GetAllUsers()
 	if err != nil {
-		utils.HandleErrorData(c, err, 0)
+		utils.HandleErrorData(c, err)
 		return
 	}
 
