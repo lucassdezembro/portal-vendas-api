@@ -42,3 +42,11 @@ func (s *AuthService) Login(loginReq models.LoginUserRequest) (string, error) {
 	return token, nil
 
 }
+
+func (s *AuthService) VerifyToken(token string) (bool, error) {
+	return s.AuthRepository.VerifyJWT(token)
+}
+
+func (s *AuthService) DecodeToken(token string) (map[string]interface{}, error) {
+	return s.AuthRepository.DecodeJWT(token)
+}

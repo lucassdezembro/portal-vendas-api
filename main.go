@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber"
 	"github.com/lucassdezembro/portal-vendas-api/controllers"
 	"github.com/lucassdezembro/portal-vendas-api/db"
+	"github.com/lucassdezembro/portal-vendas-api/middlewares"
 	"github.com/lucassdezembro/portal-vendas-api/repositories"
 	"github.com/lucassdezembro/portal-vendas-api/routes"
 	"github.com/lucassdezembro/portal-vendas-api/services"
@@ -38,12 +39,20 @@ func main() {
 	userService := services.NewUserService(userRepository)
 	authService := services.NewAuthService(authRepository)
 
+	//setup middlewares
+	tokenMiddleware := middlewares.NewTokenMiddleware(authService, userService)
+
 	routesOptions := map[string]interface{}{
 		"user": map[string]interface{}{
 			"controller": controllers.NewUserController(userService),
 		},
 		"auth": map[string]interface{}{
 			"controller": controllers.NewAuthController(userService, authService),
+		},
+		"advertisement": map[string]interface{}{
+			"middlewares": map[string]interface{}{
+				"tokenMiddleware": tokenMiddleware,
+			},
 		},
 	}
 

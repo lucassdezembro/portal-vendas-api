@@ -54,3 +54,24 @@ func (r *AuthRepository) VerifyJWT(tokenString string) (bool, error) {
 
 	return token.Valid, nil
 }
+
+func (r *AuthRepository) DecodeJWT(tokenString string) (jwt.MapClaims, error) {
+
+	secretKey := []byte(os.Getenv("JWT_SECRET_KEY"))
+
+	keyFunc := func(token *jwt.Token) (interface{}, error) {
+		return secretKey, nil
+	}
+
+	token, err := jwt.Parse(tokenString, keyFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, err
+	}
+
+	return claims, nil
+}
